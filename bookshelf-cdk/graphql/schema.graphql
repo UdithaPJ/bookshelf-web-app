@@ -1,0 +1,121 @@
+type Book {
+  id: ID!
+  title: String!
+  authors: [String!]
+  description: String
+  publisher: String!
+  publishedDate: String!
+  imageLinks: ImageLinks
+  status: BookStatus
+  favourite: Boolean
+  previewLink: String
+  infoLink: String
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type ImageLinks {
+  smallThumbnail: String
+  thumbnail: String
+}
+
+enum BookStatus {
+  READING
+  READ
+  UNREAD
+}
+
+type BookConnection {
+  items: [Book]
+  nextToken: String
+}
+
+input CreateBookInput {
+  title: String!
+  authors: [String!]
+  description: String
+  publisher: String!
+  publishedDate: String!
+  favourite: Boolean
+  previewLink: String
+  infoLink: String
+  status: BookStatus
+  imageLinks: ImageLinksInput
+}
+
+input ImageLinksInput {
+  smallThumbnail: String
+  thumbnail: String
+}
+
+input DeleteBookInput {
+  id: ID!
+}
+
+input TableBookFilterInput {
+  id: TableIDFilterInput
+  title: TableStringFilterInput
+  authors: TableStringFilterInput
+  publisher: TableStringFilterInput
+  publishedDate: TableStringFilterInput
+  favourite: TableBooleanFilterInput
+}
+
+input TableBooleanFilterInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input TableIDFilterInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+input TableStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+}
+
+input UpdateBookInput {
+  id: ID!
+  title: String
+  authors: [String!]
+  description: String
+  publisher: String
+  publishedDate: String
+  favourite: Boolean
+  previewLink: String
+  infoLink: String
+  status: BookStatus
+}
+
+type Mutation {
+  createBook(input: CreateBookInput!): Book
+  updateBook(input: UpdateBookInput!): Book
+  deleteBook(input: DeleteBookInput!): Book
+}
+
+type Query {
+  getBook(id: ID!): Book
+  listBooks(
+    filter: TableBookFilterInput
+    limit: Int
+    nextToken: String
+  ): BookConnection
+}
